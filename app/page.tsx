@@ -60,6 +60,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative px-6 pt-28 pb-20 text-center">
         <Scene3D />
+        <div className="relative z-10">
         <motion.span
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,6 +139,7 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
+        </div>
       </section>
 
       {/* Stats row */}

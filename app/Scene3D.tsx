@@ -1,46 +1,77 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial } from "@react-three/drei";
-import { useRef } from "react";
-import * as THREE from "three";
+import { motion } from "framer-motion";
 
-function AnimatedShape() {
-  const meshRef = useRef<THREE.Mesh>(null);
+const LINE_COUNT = 14;
 
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.15;
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.22;
-    }
+export default function Scene3D() {
+  const lines = Array.from({ length: LINE_COUNT }).map((_, i) => {
+    const startX = 5 + (i * 90) / LINE_COUNT;
+    return { id: i, startX, delay: i * 0.15 };
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.8} floatIntensity={1.6}>
-      <mesh ref={meshRef} scale={1.6}>
-        <icosahedronGeometry args={[1, 2]} />
-        <MeshDistortMaterial
-          color="#2BE0C4"
-          attach="material"
-          distort={0.35}
-          speed={1.8}
-          roughness={0.1}
-          metalness={0.85}
-        />
-      </mesh>
-    </Float>
-  );
-}
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <svg
+        viewBox="0 0 100 60"
+        preserveAspectRatio="none"
+        className="w-full h-full"
+      >
+        <defs>
+          <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#2BE0C4" stopOpacity="0" />
+            <stop offset="70%" stopColor="#2BE0C4" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.9" />
+          </linearGradient>
+        </defs>
 
-export default function Scene3D() {
-  return (
-    <div className="absolute inset-0 -z-10 pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 5], fov: 42 }}>
-        <ambientLight intensity={0.6} />
-        <pointLight position={[8, 8, 8]} intensity={2} color="#a855f7" />
-        <pointLight position={[-8, -5, 5]} intensity={1.4} color="#2BE0C4" />
-        <AnimatedShape />
-      </Canvas>
+        {lines.map((line) => (
+          <motion.line
+            key={line.id}
+            x1={line.startX}
+            y1="0"
+            x2="50"
+            y2="42"
+            stroke="url(#beamGrad)"
+            strokeWidth="0.15"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 1.6, delay: line.delay, ease: "easeOut" }}
+          />
+        ))}
+
+        {lines.map((line) => (
+          <motion.circle
+            key={`dot-${line.id}`}
+            r="0.35"
+            fill="#2BE0C4"
+            initial={{ opacity: 0 }}
+            animate={{
+              cx: [line.startX, 50],
+              cy: [0, 42],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 2.2,
+              delay: line.delay + 1,
+              repeat: Infinity,
+              repeatDelay: 1.5,
+              ease: "easeIn",
+            }}
+          />
+        ))}
+
+        <motion.circle
+          cx="50"
+          cy="42"
+          r="0.6"
+          fill="#2BE0C4"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.3, 0.8] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          style={{ filter: "blur(1px)" }}
+        />
+      </svg>
     </div>
   );
 }
