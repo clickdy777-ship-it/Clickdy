@@ -1,147 +1,67 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll } from "framer-motion";
+import ToolCard from "./ToolCard";
 
 const TOOLS = [
-  {
-    name: "PDF to Word",
-    desc: "Turn a locked PDF into an editable document.",
-    icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6" />,
-    from: { x: -220, y: -140, rotate: -20, scale: 0.2 },
-  },
-  {
-    name: "PDF Compress",
-    desc: "Shrink file size while keeping quality sharp.",
-    icon: <path d="M8 3v4a1 1 0 0 1-1 1H3M21 8h-4a1 1 0 0 1-1-1V3M3 16h4a1 1 0 0 1 1 1v4M16 21v-4a1 1 0 0 1 1-1h4" />,
-    from: { x: 0, y: -260, rotate: 15, scale: 0.15 },
-  },
-  {
-    name: "Background Remover",
-    desc: "Strip the background from any photo instantly.",
-    icon: <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" />,
-    from: { x: 220, y: -140, rotate: 20, scale: 0.2 },
-  },
-  {
-    name: "Image Resizer",
-    desc: "Resize images precisely, without losing quality.",
-    icon: <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />,
-    from: { x: -220, y: 140, rotate: 18, scale: 0.2 },
-  },
-  {
-    name: "AI Image Generator",
-    desc: "Turn a text prompt into a generated image.",
-    icon: <path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4l-6.4 4.4 2.4-7.2-6-4.4h7.6z" />,
-    from: { x: 0, y: 260, rotate: -15, scale: 0.15 },
-  },
-  {
-    name: "AI Text to Speech",
-    desc: "Convert written text into natural speech.",
-    icon: <path d="M11 5L6 9H2v6h4l5 4V5z M15.5 8.5a5 5 0 0 1 0 7 M18.5 5.5a9 9 0 0 1 0 13" />,
-    from: { x: 220, y: 140, rotate: -18, scale: 0.2 },
-  },
+  { name: "PDF to Word", desc: "Editable document from a locked PDF.", icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6" /> },
+  { name: "PDF Merge", desc: "Combine multiple PDFs into one.", icon: <path d="M3 3h8v8H3z M13 13h8v8h-8z" /> },
+  { name: "PDF Split", desc: "Break a PDF into separate pages.", icon: <path d="M3 4h7v16H3z M14 4h7v16h-7z" /> },
+  { name: "PDF Compress", desc: "Shrink file size, keep quality.", icon: <path d="M8 3v4a1 1 0 0 1-1 1H3M21 8h-4a1 1 0 0 1-1-1V3M3 16h4a1 1 0 0 1 1 1v4M16 21v-4a1 1 0 0 1 1-1h4" /> },
+  { name: "JPG to PDF", desc: "Turn images into a clean PDF.", icon: <path d="M3 3h18v18H3z M8.5 8.5a1.5 1.5 0 1 1 0 .01 M21 15l-5-5L5 21" /> },
+  { name: "PDF to JPG", desc: "Every PDF page as an image.", icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6" /> },
+  { name: "Image Compressor", desc: "Smaller photos, same quality.", icon: <path d="M3 3h18v18H3z M8.5 8.5a1.5 1.5 0 1 1 0 .01 M21 15l-5-5L5 21" /> },
+  { name: "Background Remover", desc: "Isolate any photo instantly.", icon: <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" /> },
+  { name: "Image Resizer", desc: "Change dimensions precisely.", icon: <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /> },
+  { name: "Image Converter", desc: "Switch between JPG, PNG, WEBP.", icon: <path d="M17 3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M9 9h6M9 13h6M9 17h3" /> },
+  { name: "Passport Photo Maker", desc: "Print-ready ID and visa photos.", icon: <path d="M4 3h16v18H4z M12 10a3 3 0 1 0 0-.01 M7 18c1-2.5 3-3.5 5-3.5s4 1 5 3.5" /> },
+  { name: "QR Generator", desc: "Any link, turned scannable.", icon: <path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h3v3h-3z M19 14h2v2h-2z M14 19h2v2h-2z M19 19h2v2h-2z" /> },
+  { name: "Word Counter", desc: "Live word and character counts.", icon: <path d="M4 7V4h16v3M9 20h6M12 4v16" /> },
+  { name: "Case Converter", desc: "UPPER, lower, Title, camelCase.", icon: <path d="M4 7V4h16v3M9 20h6M12 4v16 M4 15l4 6M8 15l-4 6" /> },
+  { name: "Signature Generator", desc: "Draw or type, download as PNG.", icon: <path d="M3 17c2-4 4-6 6-3s3 3 5-1 4-6 7-3" /> },
+  { name: "Resume Builder", desc: "Live preview, download as PDF.", icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M9 13h6M9 17h4" /> },
+  { name: "AI Image Generator", desc: "Text prompt into a picture.", icon: <path d="M12 2l2.4 7.2H22l-6 4.4 2.4 7.2L12 16.4l-6.4 4.4 2.4-7.2-6-4.4h7.6z" /> },
+  { name: "AI Text to Speech", desc: "Written text, natural voice.", icon: <path d="M11 5L6 9H2v6h4l5 4V5z M15.5 8.5a5 5 0 0 1 0 7 M18.5 5.5a9 9 0 0 1 0 13" /> },
+  { name: "Zakat Calculator", desc: "Clear 2.5% breakdown, instantly.", icon: <path d="M12 2a10 10 0 1 0 .01 0 M12 7v10M8 10h4a2 2 0 1 1 0 4H8" /> },
 ];
 
 export default function ToolsSection() {
-  return (
-    <section className="relative bg-black text-white px-6 py-32 overflow-hidden">
-      {/* Central glowing node — the "source" cards emerge from */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
-        style={{
-          width: "380px",
-          height: "380px",
-          background: "radial-gradient(circle, rgba(43,224,196,0.2) 0%, rgba(168,85,247,0.1) 45%, transparent 75%)",
-          filter: "blur(24px)",
-        }}
-        initial={{ scale: 0.4, opacity: 0 }}
-        whileInView={{ scale: [0.4, 1.3, 1], opacity: [0, 1, 0.6] }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.6, ease: "easeOut" }}
-      />
-      <motion.div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
-        style={{
-          width: "380px",
-          height: "380px",
-          background: "radial-gradient(circle, rgba(43,224,196,0.12) 0%, transparent 70%)",
-          filter: "blur(24px)",
-        }}
-        animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
 
-      <div className="relative z-10 max-w-6xl mx-auto text-center mb-20">
-        <motion.span
-          initial={{ opacity: 0, y: -20, scale: 0.5 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 200, damping: 14 }}
-          className="inline-block text-xs uppercase tracking-widest text-teal-300/70 mb-4"
-        >
-          The Toolbox
-        </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
+  return (
+    <section ref={sectionRef} className="relative bg-black h-[420vh]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-6 py-10">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 120, damping: 14, delay: 0.1 }}
-          className="text-3xl md:text-5xl font-bold tracking-tight"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8"
         >
-          Every tool. One platform.
-        </motion.h2>
-      </div>
+          <span className="inline-block text-xs uppercase tracking-widest text-teal-300/70 mb-3">
+            The Toolbox
+          </span>
+          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-white">
+            Every tool. One platform.
+          </h2>
+        </motion.div>
 
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        {TOOLS.map((tool, i) => (
-          <motion.div
-            key={tool.name}
-            initial={{
-              opacity: 0,
-              x: tool.from.x,
-              y: tool.from.y,
-              rotate: tool.from.rotate,
-              scale: tool.from.scale,
-            }}
-            whileInView={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{
-              type: "spring",
-              stiffness: 90,
-              damping: 11,
-              mass: 0.9,
-              delay: i * 0.1,
-            }}
-            className="relative bg-white/[0.04] border border-white/10 rounded-2xl p-7 text-left hover:border-teal-400/40 hover:bg-white/[0.07] transition-colors"
-          >
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{
-                duration: 3.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1 + i * 0.15,
-              }}
-            >
-              <motion.div
-                className="w-11 h-11 rounded-xl bg-teal-400/10 border border-teal-400/20 flex items-center justify-center mb-5 text-teal-300"
-                animate={{
-                  boxShadow: [
-                    "0 0 0px rgba(43,224,196,0)",
-                    "0 0 14px rgba(43,224,196,0.35)",
-                    "0 0 0px rgba(43,224,196,0)",
-                  ],
-                }}
-                transition={{ duration: 3, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-                  {tool.icon}
-                </svg>
-              </motion.div>
-              <h3 className="text-lg font-semibold mb-2">{tool.name}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{tool.desc}</p>
-            </motion.div>
-          </motion.div>
-        ))}
+        <div className="relative z-10 grid grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 max-w-6xl mx-auto text-white">
+          {TOOLS.map((tool, i) => (
+            <ToolCard
+              key={tool.name}
+              tool={tool}
+              index={i}
+              total={TOOLS.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
