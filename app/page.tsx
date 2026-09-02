@@ -58,7 +58,7 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="relative px-6 pt-28 pb-20 text-center">
+       <section className="relative overflow-hidden px-6 pt-28 pb-20 text-center">
         <Scene3D />
         <div className="relative z-10">
         <motion.span

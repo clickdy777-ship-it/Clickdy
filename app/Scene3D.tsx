@@ -2,76 +2,73 @@
 
 import { motion } from "framer-motion";
 
-const LINE_COUNT = 14;
+const PARTICLES = Array.from({ length: 24 }).map((_, i) => ({
+  id: i,
+  left: 8 + Math.random() * 84,
+  top: 8 + Math.random() * 84,
+  size: 2 + Math.random() * 4,
+  duration: 6 + Math.random() * 6,
+  delay: Math.random() * 5,
+}));
 
 export default function Scene3D() {
-  const lines = Array.from({ length: LINE_COUNT }).map((_, i) => {
-    const startX = 5 + (i * 90) / LINE_COUNT;
-    return { id: i, startX, delay: i * 0.15 };
-  });
-
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      <svg
-        viewBox="0 0 100 60"
-        preserveAspectRatio="none"
-        className="w-full h-full"
-      >
-        <defs>
-          <linearGradient id="beamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#2BE0C4" stopOpacity="0" />
-            <stop offset="70%" stopColor="#2BE0C4" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.9" />
-          </linearGradient>
-        </defs>
+      {/* Central pulsing glow orb */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          width: "480px",
+          height: "480px",
+          background:
+            "radial-gradient(circle, rgba(43,224,196,0.28) 0%, rgba(168,85,247,0.14) 45%, transparent 75%)",
+          filter: "blur(30px)",
+        }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.9, 0.6] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-        {lines.map((line) => (
-          <motion.line
-            key={line.id}
-            x1={line.startX}
-            y1="0"
-            x2="50"
-            y2="42"
-            stroke="url(#beamGrad)"
-            strokeWidth="0.15"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{ duration: 1.6, delay: line.delay, ease: "easeOut" }}
-          />
-        ))}
+      {/* Secondary smaller orb, offset, drifting slowly */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 rounded-full"
+        style={{
+          width: "260px",
+          height: "260px",
+          background:
+            "radial-gradient(circle, rgba(168,85,247,0.25) 0%, transparent 70%)",
+          filter: "blur(24px)",
+        }}
+        animate={{
+          x: [-60, 40, -60],
+          y: [-30, 30, -30],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-        {lines.map((line) => (
-          <motion.circle
-            key={`dot-${line.id}`}
-            r="0.35"
-            fill="#2BE0C4"
-            initial={{ opacity: 0 }}
-            animate={{
-              cx: [line.startX, 50],
-              cy: [0, 42],
-              opacity: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2.2,
-              delay: line.delay + 1,
-              repeat: Infinity,
-              repeatDelay: 1.5,
-              ease: "easeIn",
-            }}
-          />
-        ))}
-
-        <motion.circle
-          cx="50"
-          cy="42"
-          r="0.6"
-          fill="#2BE0C4"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.3, 0.8] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ filter: "blur(1px)" }}
+      {/* Floating particles */}
+      {PARTICLES.map((p) => (
+        <motion.span
+          key={p.id}
+          className="absolute rounded-full bg-teal-300"
+          style={{
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            boxShadow: "0 0 8px 2px rgba(43,224,196,0.6)",
+          }}
+          animate={{
+            y: [0, -18, 0],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
-      </svg>
+      ))}
     </div>
   );
 }
