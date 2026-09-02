@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-
+import Scene3D from "./Scene3D";
 const tools = [
   { icon: "📄", name: "PDF to Word", tag: "Document" },
   { icon: "🗜️", name: "PDF Compress", tag: "Document" },
@@ -59,6 +59,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative px-6 pt-28 pb-20 text-center">
+        <Scene3D />
         <motion.span
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
