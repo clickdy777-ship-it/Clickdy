@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import Scene3D from "./Scene3D";
-
+import ToolsSection from "./ToolsSection";
 export default function Home() {
   return (
-    <main className="relative h-screen bg-black text-white overflow-hidden flex flex-col">
+     <main className="relative bg-black text-white">
       {/* Navbar */}
       <nav className="z-50 flex items-center justify-between px-8 py-5 backdrop-blur-md bg-black/60 border-b border-white/10">
         <div className="text-xl font-bold tracking-tight">CLICKDY</div>
@@ -20,7 +20,7 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="relative flex-1 overflow-hidden px-6 flex items-center justify-center text-center">
+      <section className="relative h-screen overflow-hidden px-6 flex flex-col items-center justify-center text-center">
         <Scene3D />
         <div className="relative z-10">
           <motion.span
@@ -69,6 +69,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      <ToolsSection />
     </main>
   );
 }
