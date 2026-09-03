@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import Scene3D from "./Scene3D";
-import PdfToolsSection from "./PdfToolsSection";
-export default function Home() {
+import ToolsCarousel from "./ToolsCarousel";
+ export default function Home() {
   return (
     <main className="relative bg-black text-white">
       {/* Navbar */}
@@ -69,7 +69,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <PdfToolsSection />
+      <ToolsCarousel />
     </main>
   );
 }
