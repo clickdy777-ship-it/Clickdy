@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Scene3D from "./Scene3D";
 import ToolsCarousel from "./ToolsCarousel";
+import ToolsCylinderSection from "./ToolsCylinderSection";
  export default function Home() {
   return (
     <main className="relative bg-black text-white">
@@ -70,6 +71,7 @@ import ToolsCarousel from "./ToolsCarousel";
         </div>
       </section>
       <ToolsCarousel />
+      <ToolsCylinderSection />
     </main>
   );
 }
