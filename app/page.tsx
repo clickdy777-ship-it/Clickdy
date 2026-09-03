@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Scene3D from "./Scene3D";
 import ToolsCarousel from "./ToolsCarousel";
 import ToolsCylinderSection from "./ToolsCylinderSection";
+import { FlipText, LiquidText, MorphText } from "./AnimatedHeadline";
  export default function Home() {
   return (
     <main className="relative bg-black text-white">
@@ -34,16 +35,14 @@ import ToolsCylinderSection from "./ToolsCylinderSection";
           </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-3xl mx-auto"
           >
-            The platform that makes
-            <br />
-            <span className="bg-gradient-to-r from-teal-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
-              everyday tools work for you.
-            </span>
+           <FlipText text="The platform that makes" />
+           <br />
+           <LiquidText text="everyday tools" /> <MorphText text="work for you." />
           </motion.h1>
 
           <motion.p
