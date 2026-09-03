@@ -41,7 +41,7 @@ export default function Home() {
           >
             <FlipText text="The platform that makes" />
             <br />
-            <FlipText text="everyday tools work for you." />
+            <FlipText text="everyday tools work for you" />
           </motion.h1>
 
           <motion.p
