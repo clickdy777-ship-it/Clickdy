@@ -87,7 +87,7 @@ export default function ToolsCarousel() {
             The Toolbox
           </span>
           <h2 className="text-3xl md:text-5xl font-bold text-white mt-2">
-            Every tool, one at a time.
+            PDF Tools.
           </h2>
         </div>
 
