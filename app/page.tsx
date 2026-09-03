@@ -5,7 +5,8 @@ import Scene3D from "./Scene3D";
 import ToolsCarousel from "./ToolsCarousel";
 import ToolsCylinderSection from "./ToolsCylinderSection";
 import { FlipText } from "./AnimatedHeadline";
- export default function Home() {
+
+export default function Home() {
   return (
     <main className="relative bg-black text-white">
       {/* Navbar */}
@@ -13,8 +14,6 @@ import { FlipText } from "./AnimatedHeadline";
         <div className="text-xl font-bold tracking-tight">CLICKDY</div>
         <div className="hidden md:flex gap-8 text-sm text-white/70">
           <a href="#tools" className="hover:text-white transition">Tools</a>
-          <a href="#features" className="hover:text-white transition">Features</a>
-          <a href="#faq" className="hover:text-white transition">FAQ</a>
         </div>
         <button className="bg-white text-black text-sm font-medium px-5 py-2 rounded-full hover:bg-white/90 transition">
           Get Started
@@ -35,15 +34,15 @@ import { FlipText } from "./AnimatedHeadline";
           </motion.span>
 
           <motion.h1
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.1 }}
-           className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-3xl mx-auto"
-         >
-          <FlipText text="The platform that makes" />
-          <br />
-          <FlipText text="everyday tools work for you." />
-        </motion.h1>
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] max-w-3xl mx-auto"
+          >
+            <FlipText text="The platform that makes" />
+            <br />
+            <FlipText text="everyday tools work for you." />
+          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -60,17 +59,20 @@ import { FlipText } from "./AnimatedHeadline";
             transition={{ duration: 0.8, delay: 0.5 }}
             className="flex justify-center gap-4 mt-8"
           >
-            <button className="bg-white text-black px-7 py-3 rounded-full font-medium hover:bg-white/90 transition">
+            <a href="#tools" className="bg-white text-black px-7 py-3 rounded-full font-medium hover:bg-white/90 transition">
               Browse Tools
-            </button>
+            </a>
             <button className="border border-white/20 px-7 py-3 rounded-full font-medium hover:bg-white/10 transition">
               How it works
             </button>
           </motion.div>
         </div>
       </section>
-      <ToolsCarousel />
-      <ToolsCylinderSection />
+
+      <div id="tools">
+        <ToolsCarousel />
+        <ToolsCylinderSection />
+      </div>
     </main>
   );
 }
