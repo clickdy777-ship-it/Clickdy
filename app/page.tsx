@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import Scene3D from "./Scene3D";
-import ToolsSection from "./ToolsSection";
+import PdfToolsSection from "./PdfToolsSection";
 export default function Home() {
   return (
-     <main className="relative bg-black text-white">
+    <main className="relative bg-black text-white">
       {/* Navbar */}
       <nav className="z-50 flex items-center justify-between px-8 py-5 backdrop-blur-md bg-black/60 border-b border-white/10">
         <div className="text-xl font-bold tracking-tight">CLICKDY</div>
@@ -69,7 +69,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <ToolsSection />
+      <PdfToolsSection />
     </main>
   );
 }
